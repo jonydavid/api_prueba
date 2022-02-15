@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>Prueba API REST</title>
+    <style type="text/css">
+      body
+      {
+        background-color: #F4F6F6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 min-vh-100 d-flex flex-column justify-content-center">
+          <div class="row">
+            <div class="col-lg-5 col-md-5 mx-auto">
+                <div class="card rounded shadow shadow-sm">
+                    <div class="card-header">
+                      <h3 class="mb-0">Inicio de Sesión</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form" role="form" autocomplete="off" id="formulario">
+                          <div class="form-group">
+                            <label for="user" class="label-sm">Usuario</label>
+                            <input type="text" class="form-control form-control-sm rounded-1" name="user" id="user" required="">
+                          </div>
+                          <div class="form-group">
+                            <label class="label-sm">Contraseña</label>
+                            <input type="password" class="form-control form-control-sm rounded-1" name="pass" id="pass" required>
+                          </div>
+                          <button type="submit" class="btn btn-success btn-md float-right" id="btnLogin">Ingresar</button>
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        $(document).ready(function () 
+        {
+          sessionStorage.removeItem('user');
+          $("#formulario").submit(function(e)
+          {
+            e.preventDefault();
+
+            var user = $("#user").val();
+            var pass = $("#pass").val();
+            
+            $.ajax(
+            {
+              url: 'http://127.0.0.1/api_prueba/api.php', //reemplazar por la ubicacion del archivo.
+              dataType: 'json',
+              type: 'post',
+              contentType: 'application/json; charset=utf-8',
+              data: JSON.stringify({user:user,pass:pass}),
+              success: function(datos, textStatus, jQxhr)
+              {
+                if(datos['retorno'] == 'true')
+                {
+                  location.href ='./ciudades.php';
+                  sessionStorage.setItem('user', datos['user']);
+                }
+                else
+                {
+                  Swal.fire('Usuario inválido o incorrecto');
+                }
+              },
+              error: function(jqXhr, textStatus, errorThrown)
+              {  
+                Swal.fire('Error. Intentelo nuevamente');
+              }
+            });
+          });
+            
+    
+        });
+    </script>
+  </body>
+</html>
